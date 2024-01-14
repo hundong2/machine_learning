@@ -4,8 +4,8 @@
 - 이때 N개의 데이터들은 각각 독립이기때문에 다음의 식이 나올 수 있다.
 - Bernoulli(p) distribution을 따른다는 가정.  P, 1-P 으로 부터 sampling 되었을 때 
 
-Finding $\theta$ that maximized $P(X1, ..., Xn; \theta)$  
-We have $P(Xi;\theta)$
+Finding $$\theta$$ that maximized $$P(X1, ..., Xn; \theta)$$  
+We have $$P(Xi;\theta)$$
 
 $$
 P(X1,...,Xn;\theta)\,=\,\prod_{i} P(Xi;\theta)\\
@@ -16,7 +16,7 @@ $$
 - 이렇게 로그 기반의 Likelihood 식에서 $\theta$에 대해 derivative하여 0이 되는 값을 찾는 경우가 최대인 Probability를 찾는 것이 목표
 
 
-- Solving $\rightarrow\frac{\theta}{\partial\theta}log\sum_{i}{P(Xi;\theta)=0}$
+- Solving $$\rightarrow\frac{\theta}{\partial\theta}log\sum_{i}{P(Xi;\theta)=0}$$
 
 - Log-likelihood is a monotonic function of the like lihood 
 - likelihood에 Log를 씌우더라도 그래프에서의 maximum은 변하지 않는다.  
@@ -43,7 +43,7 @@ $$
 
 [gaussian](https://en.wikipedia.org/wiki/Normal_distribution#/media/File:Normal_Distribution_PDF.svg)  
 
-- MLE of $\mu$
+- MLE of $$\mu$$
 $$
 f_{x};(x;\,\mu,\,\sigma)\,=\,\prod_{i}f_{xi}(x_{i}; \mu, \sigma)\\
 \downarrow \\
