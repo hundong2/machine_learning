@@ -9,7 +9,7 @@
 
 ## interval estimate 
 
-$a < x < b$ is an interval estimate of the population mean $\mu$
+$$a < x < b$$ is an interval estimate of the population mean $$\mu$$
 
 ## Likelihood 
 
@@ -18,8 +18,11 @@ $a < x < b$ is an interval estimate of the population mean $\mu$
 - data = 65
 
 - Likelihood 
-$$P\left(data | p\right)=\left(\begin{matrix}100 \\65\end{matrix}\right)
-p^{65}(1-p)^{35}$$  
+
+$$
+P\left(data | p\right)=\left(\begin{matrix}100 \\65\end{matrix}\right)
+p^{65}(1-p)^{35}
+$$  
 
 ## Maximum Likelihood Estimation ( MLE )
 
