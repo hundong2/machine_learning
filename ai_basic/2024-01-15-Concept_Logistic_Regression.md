@@ -1,3 +1,11 @@
+---
+title: "The Concept of Logistic Regression "
+permalink: /posts/LogisticRegressionConcept/
+excerpt: "The Concept of Logistic Regression."
+redirect_from:
+  - /theme-setup/
+toc: true
+---
 # The Concept of Logistic Regression 
 
 - Probabilistic View for a Linear Classifier 

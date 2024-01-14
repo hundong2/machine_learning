@@ -1,3 +1,12 @@
+---
+title: "Maximum Likelihood Estimation"
+permalink: /posts/maximum_likelihood/
+excerpt: "Maximum Likelihood Estimation."
+redirect_from:
+  - /theme-setup/
+toc: true
+---
+
 # Maximum Likelihood Estimation
 
 - 모분포 위에서 파라메터를 추정할 때 추정하는 기법 
@@ -77,7 +86,10 @@ $$
 \ln\,f_{X}(X;\mu,\sigma)=-n\ln\,\sqrt{2\pi\sigma^{2}}-\sum_{i}\frac{(x_{i}-\mu)^{2}}{2\sigma^{2}}\,(n=\sum_{i},\ln{e}=1)
 $$
 
-$\Rightarrow$ Solving for $\frac{\partial}{\partial\mu}\ln\,f_{X}(X;\mu,\sigma)=0$
+$$
+\Rightarrow Solving for \frac{\partial}{\partial\mu}\ln\,f_{X}(X;\mu,\sigma)=0
+$$
+
 $$
 \frac{\partial}{\partial\mu}\sum_{i}\frac{(x_{i}-\mu)^{2}}{2\sigma^{2}}=0
 $$
