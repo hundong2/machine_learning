@@ -52,3 +52,7 @@
 - 9장
     - TMDB 5000 영화 데이터 세트: <https://www.kaggle.com/datasets/tmdb/tmdb-movie-metadata>
     - MovieLens 데이터 세트: <https://grouplens.org/datasets/movielens/latest/>
+
+# reference 
+
+https://wikidocs.net/book/16798
