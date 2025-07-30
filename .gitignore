@@ -1,2 +1,9 @@
 */.ipynb_checkpoints/
 3장/titanic_train.csv
+*.csv
+*.csv.gz
+*.tsv
+*.tsv.gz
+*.json
+.DS_Store
+*.log
