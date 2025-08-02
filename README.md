@@ -1,5 +1,19 @@
 ![cover](cover.jpg)
 
+# conda install
+
+```sh
+brew install --cask anaconda
+export PATH="/opt/homebrew/anaconda3/bin:/$PATH"
+source ~/.zshrc
+```
+
+# conda install 
+
+```sh
+conda install -c conda-forge xgboost -y
+```
+
 # 파이썬 머신러닝 완벽 가이드(개정2판)
 ### 다양한 캐글 예제와 함께 기초 알고리즘부터 최신 기법까지 배우는
 
