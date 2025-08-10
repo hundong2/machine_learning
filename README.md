@@ -8,6 +8,13 @@ export PATH="/opt/homebrew/anaconda3/bin:/$PATH"
 source ~/.zshrc
 ```
 
+# location of study
+
+- [regression 시각화](./MachineLearningExample/visualize_result.md). 
+- [pytorch vs sklearn](./MachineLearningExample/compare_torch_sklearn.md). 
+- [ML 공부 기초](./MachineLearningExample)
+- 
+
 # conda install 
 
 ```sh
