@@ -1,5 +1,13 @@
 # install
 
+- `uv` initialize 
+
+```sh
+uv init <folder name>
+uv run xxx.py
+uv install langgraph
+```
+
 ```sh
 pip install langgraph
 pip install -U langgraph #latest version download
