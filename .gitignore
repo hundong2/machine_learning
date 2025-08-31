@@ -5,8 +5,11 @@
 *.tsv
 *.tsv.gz
 *.json
+!launch.json
+!settings.json
 .DS_Store
 *.log
 *.pki
 *.xls
 *.xlsx
+.env
