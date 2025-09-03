@@ -1,0 +1,11 @@
+[project]
+name = "ua"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "dotenv>=0.9.9",
+    "langchain-core>=0.3.75",
+    "langchain[google-genai,openai]>=0.3.27",
+]
