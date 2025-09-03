@@ -19,7 +19,7 @@ LITTLE_PRINCE_PERSONA="""
 """
 client = OpenAI(
     api_key=os.getenv("LMS_API_KEY"),
-    base_url="http://192.168.45.167:50505/v1"
+    base_url="http://192.168.45.167:50505/v1" #using qwen model
 )
 
 def chatbot_response(user_message: str, previous_response_id: str = None):
