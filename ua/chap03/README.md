@@ -154,6 +154,17 @@ chain = compoent1 | component2 | component3
 - 유연성 : 실행 시점에 동적으로 체인을 구성하거나 수정할 수 있음. 
 - [LCEL Example](./langchain_runnable_lcel.py). 
 
+- runnable 주요 타입들 
+  - [Runnable vairous type](./langchain_runnable_passthrough.py). 
+  - [Runnable Lambda](./langchain_runnable_type-lambda.py). 
+  - [Runnable Branch](./langchain_runnable_branch.py)  
+    - RunnableBranch의 첫번째 파라미터로는 ( 조건 함수, 실행할 체인) 
+
+### Langchain Tools
+
+
+
+
 ## example code 
 
 - [langchain example 1](./langchainExample.py)
