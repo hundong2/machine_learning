@@ -1,4 +1,19 @@
-# OpenAI Chat Completion API의 `messages` 구조 상세 설명
+## lecture 
+
+## chapter 
+
+- [chapter 1](./chap01/1.asyncawait.py)
+  - setting llm ( gemini, local openAI API)
+- [chapter 2](./chap02/add_web_interface.py)
+  - example llm async using many kind of LLM API Module 
+  - example fastapi chating program
+- [chapter 3](./chap03/README.md)
+  - langchain 
+  - Runnable
+  - LCEL ( Langchain Expression language), `|` pipeline
+
+
+## OpenAI Chat Completion API의 `messages` 구조 상세 설명
 
 `messages` 파라미터는 대화의 맥락을 전달하기 위한 메시지 객체들의 배열(리스트)입니다. 각 메시지는 `role`과 `content`를 키로 가지는 JSON(파이썬에서는 딕셔너리) 객체입니다. 이 구조는 OpenAI가 선도적으로 도입했으며, 다른 주요 AI 회사들도 유사한 개념을 채택했지만 필드 이름이나 구조에서 약간의 차이가 있어 완전한 표준 규격은 아닙니다.
 
@@ -55,5 +70,3 @@
 -   [OpenAI API Reference (Chat)](https://platform.openai.com/docs/api-reference/chat)
 -   [Google AI for Developers (Gemini API)](https://ai.google.dev/docs/gemini_api_overview)
 -   [Anthropic API Docs (Messages)](https://docs.anthropic.com/claude/reference/messages_post)
-
-라이선스 유형이 2개인 유사한 코드가 있습니다.
