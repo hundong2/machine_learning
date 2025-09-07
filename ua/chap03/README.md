@@ -184,6 +184,15 @@ chain = compoent1 | component2 | component3
 uv pip install numpy langchain-community
 ```
 
+#### Embedding 
+
+- 인간의 언어를 컴퓨터가 이해할 수 있는 숫자의 배열 형태로 바꾸는 것 
+- 임베딩은 벡터 스토어와 함께 사용해야 의미가 있음.  
+- `Vector Store`는 임베딩을 효율적으로 저장하고 검색하는 데이터 베이스 
+- `Embedding` + `Vector Store` = `의미 기반 검색`을 가능하게 함. ( 유사도 추정 )
+- [embedding example](./langchain_embedding.py)
+
+
 ## example code 
 
 - [langchain example 1](./langchainExample.py)
