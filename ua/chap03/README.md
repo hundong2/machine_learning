@@ -175,7 +175,14 @@ chain = compoent1 | component2 | component3
 
 - `@tool decorator`
   - [langchain tool decorator](./langchain_tool_decorator.py). 
-  - 
+
+### Langchain Embeddings and Vector store 
+
+- need package's 
+
+```sh
+uv pip install numpy langchain-community
+```
 
 ## example code 
 
