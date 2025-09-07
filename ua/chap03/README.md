@@ -147,7 +147,7 @@ chain = compoent1 | component2 | component3
 - Unix shell의 파이프와 비슷하게 동작 
 - 앞 컴포넌트의 출력이 다음 컴포넌트의 입력이 됨. 
 
-##### prob
+##### pros
 
 - 가독성 : 코드가 데이터의 흐름을 그대로 보여줌. 
 - 재사용성 : 만든 체인은 그 자체로 Runnable 이므로, 다른 체인의 일부로 사용할 수 있음. 
@@ -162,8 +162,20 @@ chain = compoent1 | component2 | component3
 
 ### Langchain Tools
 
+- langchain의 도구는 외부 세계와 상호 작용하는 강력한 기능 
+- 가장 많이 도입 된 도구는 database 와 web browser 
+- LLM을 제공해주는 업체에서 `function calling`이라는 기능으로 도구 사용을 제공하지만 `불편`
 
+#### langchain tools using sequence 
 
+1. Tool Creation : 사용할 도구를 준비 
+2. Tool Building : 사용할 도구를 LLM에 연결 
+3. Tool Calling : LLM이 사용할 도구를 선택
+4. Tool Execution : LLM이 도구를 실행하여 작업 
+
+- `@tool decorator`
+  - [langchain tool decorator](./langchain_tool_decorator.py). 
+  - 
 
 ## example code 
 
