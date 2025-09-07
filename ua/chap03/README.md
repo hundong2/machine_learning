@@ -152,7 +152,7 @@ chain = compoent1 | component2 | component3
 - 가독성 : 코드가 데이터의 흐름을 그대로 보여줌. 
 - 재사용성 : 만든 체인은 그 자체로 Runnable 이므로, 다른 체인의 일부로 사용할 수 있음. 
 - 유연성 : 실행 시점에 동적으로 체인을 구성하거나 수정할 수 있음. 
-
+- [LCEL Example](./langchain_runnable_lcel.py). 
 
 ## example code 
 
