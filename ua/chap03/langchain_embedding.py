@@ -6,9 +6,9 @@ from dotenv import load_dotenv
 load_dotenv()
 
 embeddings = OpenAIEmbeddings(
-    model="embeddinggemma-300m",
+    model="text-embedding-nomic-embed-text-v1.5",
     api_key=os.getenv("LMS_API_KEY"),
-    base_url="http://192.168.45.167:50505/v1/embeddings" # /embeddings 포함
+    base_url="http://192.168.45.167:50505/v1" # /embeddings 포함
 )
 
 words = ["강아지", "고양이", "토끼", "비행기"] 

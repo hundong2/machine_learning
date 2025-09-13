@@ -191,6 +191,43 @@ uv pip install numpy langchain-community
 - `Vector Store`는 임베딩을 효율적으로 저장하고 검색하는 데이터 베이스 
 - `Embedding` + `Vector Store` = `의미 기반 검색`을 가능하게 함. ( 유사도 추정 )
 - [embedding example](./langchain_embedding.py)
+- [embedding example for ollama](./langchain_embedding_for_ollama.py). 
+  - [github AI](https://github.com/hundong2/AI/blob/main/Network.md). 
+
+- 코사인 유사도 ( $$내적 / (벡터의 길이 * 벡터의 길이) $$ )
+  - 두벡터 간의 코사인 값을 구하는 공식 
+  - 이 값이 1에 가까울 수록 유사한 의미 
+  - 0이면 무관, -1이면 반대의 의미를 가짐. 
+
+#### Embedding Example 
+
+- 임베딩을 효율적으로 저장하고 검색할 수 있는 데이터베이스 -> `벡터 스토어` 가 등장
+- 수천, 수만개의 문서를 벡터로 저장하고 필요 시 유사한 내용을 빠르게 찾을 수 있다. 
+- `FAISS` opensource vecotr sotre 
+  - facebook이 만든 오픈소스 [FAISS](https://github.com/facebookresearch/faiss)
+  - need langchain-community package 
+  - `uv pip install langchin-community`, `uv pip install faiss-cpu` or `uv pip install faiss-gpu`
+  - [Example FAISS embedding](./langchain_embedding_FAISS.py). 
+  - [Vector store document](./VectorStore.md). 
+- [document를 이용한 FAISS(vector store)](./langchain_vectorstore_with_doc.py). 
+- [document loader를 활용한 FAISS(vector store) 여러파일에서 내용을 읽어와 vector store](./langchain_vectorstore_with_doc_loader.py)
+  - `FAISS`의 경우 `Consine` 유사도와 다르게 값이 0ㅇ에 가까울 수록 유사. 
+  - 직관적으로 생각하는 부분과 반대 
+  - langchain 지원 document loader 
+    - [document loaders](https://python.langchain.com/docs/integrations/document_loaders/). 
+    - [vector stores](https://python.langchain.com/docs/integrations/vectorstores/). 
+
+### Retriever and RAG
+
+#### Retriever
+
+- 강아지 
+- 사용자가 원하는 정보를 무엇이든 물어다주는 것
+- 자연어로 검색을 하기 위한 인터페이스 
+- [custom retriever of langchain](https://python.langchain.com/docs/how_to/custom_retriever/). 
+- vector DB를 활용한 retriever 또는, langchain에서 제공하는 retriever 사용가능
+  - vector DB의 경우 Runnable이 구현이 안되어 있음
+  - langchain에서 제공되는 경우 Runnable이 구현되어 있음. ( LCEL 사용 가능 ) 
 
 
 ## example code 
@@ -200,4 +237,4 @@ uv pip install numpy langchain-community
 - [langchain using conversation list](./langchain_chat_list.py)
 - [pydantic example](./pydantic.md). 
 - [Any](./Any.md). 
-- 
+- [yozm](https://github.com/wapj/yozm-ai-agent). 
