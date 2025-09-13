@@ -229,6 +229,13 @@ uv pip install numpy langchain-community
   - vector DB의 경우 Runnable이 구현이 안되어 있음
   - langchain에서 제공되는 경우 Runnable이 구현되어 있음. ( LCEL 사용 가능 ) 
 
+- example
+  - [Retriever](./langchain_retriever.py). 
+  - [RAG](./langchain_RAG.py)  
+    - `DuckDuckGoSearchRun` - web 검색을 지원 
+      - `pip install duckduckgo-search` + `https://www.tavily.com` monthly 1000 request count.  
+ 
+
 
 ## example code 
 
