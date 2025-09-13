@@ -11,6 +11,10 @@
   - langchain 
   - Runnable
   - LCEL ( Langchain Expression language), `|` pipeline
+  - tool decorator
+  - RAG, Retriever
+- [chapter4](./chap04/README.md). 
+  - Agent
 
 
 ## OpenAI Chat Completion API의 `messages` 구조 상세 설명
