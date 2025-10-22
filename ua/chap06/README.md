@@ -40,3 +40,31 @@
 ## 조건부 라우팅 적용: 감정 분석 챗봇
 
 - example, 시작노드 -> 감정 파악 -> 부정 답변 | 중립 답변 | 긍정 답변 -> 종료 노드
+- [Conditional LangGraph example](./conditional_routing.py)  
+
+## check pointer를 활용한 상태 관리
+
+- check pointer system은 영속성과 오류 복구를 위한 핵심 기능 
+- 상태의 영속성 이란? 
+  - 그래프 실행 중 각 노드의 상태를 저장 한다는 의미 
+  - 여러 대화나 세션의 상태를 독립적으로 관리할 수 있어서 동시에 여러 워크플로를 처리할 수 있습니다.  
+- 사용법
+  - 체크 포인터 설정
+  - 그래프에 체크 포인터 연결
+  - 스레드 ID로 상태 관리 
+
+```python
+from langgraph.checkpoint.sqlite import SqliteSaver
+from langgraph.graph import StateGraph
+
+checkpointer=SqliteSaver.from_conn_string(":memory:") #check pointer setting
+app = StateGraph(state_schema).compile(checkpointer=checkpointer) #graph에 체크 포인터 연결
+config = { "configure":{"thread_id": "thread-1"}}
+result = app.invoke(input_data, config=config)
+
+```
+
+- 기본적으로 제공하는 check pointer
+  - `BaseCheckpointSaver` : 추상 기본 클래스
+  - `InMemorySaver` : 메모리 기반 구현
+  - `SQLiteSaver`, `PostgresSaver` : 영구 저장소 구현 
