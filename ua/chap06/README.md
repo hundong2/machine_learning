@@ -68,3 +68,35 @@ result = app.invoke(input_data, config=config)
   - `BaseCheckpointSaver` : 추상 기본 클래스
   - `InMemorySaver` : 메모리 기반 구현
   - `SQLiteSaver`, `PostgresSaver` : 영구 저장소 구현 
+
+- `loop_workflow`
+  - [example code](./loop_workflow.py)
+- output
+
+```sh
+game start!
+입력: 5
+[1번째 시도] 추측: 5
+[check_guess] 5 ( 시도: 1회)
+[route_game] 현재 상태: playing, 시도 횟수: 1
+입력: 3
+[2번째 시도] 추측: 3
+[check_guess] 3 ( 시도: 2회)
+[route_game] 현재 상태: playing, 시도 횟수: 2
+입력: 10
+[3번째 시도] 추측: 10
+[check_guess] 10 ( 시도: 3회)
+[route_game] 현재 상태: playing, 시도 횟수: 3
+입력: 55
+[4번째 시도] 추측: 55
+[check_guess] 55 ( 시도: 4회)
+[route_game] 현재 상태: playing, 시도 횟수: 4
+입력: 4
+[5번째 시도] 추측: 4
+[check_guess] 4 ( 시도: 5회)
+시도 횟수 초과
+[route_game] 현재 상태: lost, 시도 횟수: 5
+최종 결과: 아쉽네요! 최대 시도 횟수를 초과했습니다. 정답은 28였습니다.
+게임 상태: lost
+총 시도: 5회
+```
