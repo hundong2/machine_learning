@@ -123,3 +123,8 @@ game start!
     주식 시장: KOSPI 2500.75, NASDAQ 13000.5
     병렬 처리 시간: 1.59초
 ```
+
+# ToolNode를 사용한 도구 사용기능 만들기 
+
+- ![06.png](./06.png)
+- [example code](./tool_calling.py)  
