@@ -41,7 +41,15 @@ uv pip install "mcp[cli]"==1.16
 uv pip show mcp
 ```
 
+## Simple MCP Server 
+
+- [code](simple_mcp_server.py). 
+
 ## MCP Test Tools 
 
 - [inspector](https://github.com/modelcontextprotocol/inspector)
 - [MCP Server](https://github.com/modelcontextprotocol/servers)
+- [MCP remote](https://github.com/geelen/mcp-remote). 
+- [MCP RoadMAP](https://modelcontextprotocol.io/development/roadmap) 
+- [github discussion](https://github.com/orgs/modelcontextprotocol/discussions). 
+- [Google A2A](https://github.com/a2aproject/A2A). 
