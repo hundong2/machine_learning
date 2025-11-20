@@ -45,6 +45,11 @@ uv pip show mcp
 
 - [code](simple_mcp_server.py). 
 
+## Agent Example
+
+- [AgentCard](./basic_agent/server.py). 
+- 
+
 ## MCP Test Tools 
 
 - [inspector](https://github.com/modelcontextprotocol/inspector)
