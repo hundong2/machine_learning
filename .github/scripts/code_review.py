@@ -1,3 +1,4 @@
+```python
 import os
 import sys
 import subprocess
@@ -5,17 +6,17 @@ from google import genai
 from google.genai import types
 
 def get_gemini_client():
-    """Retrieves and configures the Gemini API client.
+    """Gemini API 클라이언트를 검색하고 구성합니다.
 
-    This function retrieves the API key from the environment variables,
-    configures the Gemini client, and returns it.  If the API key is not found,
-    it prints an error message and exits the program.
+    이 함수는 환경 변수에서 API 키를 검색하고,
+    Gemini 클라이언트를 구성하고 반환합니다. API 키를 찾을 수 없으면
+    오류 메시지를 인쇄하고 프로그램을 종료합니다.
 
-    Returns:
-        genai.Client: Configured Gemini API client.
+    반환:
+        genai.Client: 구성된 Gemini API 클라이언트.
 
-    Raises:
-        SystemExit: If the GOOGLE_API_KEY environment variable is not set.
+    발생:
+        SystemExit: GOOGLE_API_KEY 환경 변수가 설정되지 않은 경우.
     """
     api_key = os.getenv("GOOGLE_API_KEY") # 환경 변수에서 API 키를 가져옵니다.
     if not api_key:
@@ -24,15 +25,14 @@ def get_gemini_client():
     return genai.Client(api_key=api_key) # Gemini API 클라이언트를 설정하고 반환합니다.
 
 def get_changed_files():
-    """Retrieves a list of files changed between the last two commits using Git.
+    """Git을 사용하여 마지막 두 커밋 간에 변경된 파일 목록을 검색합니다.
 
-    This function uses the `git diff` command to identify files that have been
-    modified between the `HEAD~1` (previous commit) and `HEAD` (current commit).
-    It filters the list to include only those files that currently exist in the
-    file system.
+    이 함수는 `git diff` 명령을 사용하여 수정된 파일을 식별합니다.
+    `HEAD~1`(이전 커밋)과 `HEAD`(현재 커밋) 사이.
+    파일 시스템에 현재 존재하는 파일만 포함하도록 목록을 필터링합니다.
 
-    Returns:
-        list[str]: A list of file paths that have been changed, or an empty list if an error occurs or no changes are found.
+    반환:
+        list[str]: 변경된 파일 경로 목록 또는 오류가 발생하거나 변경 사항이 없는 경우 빈 목록입니다.
     """
     try:
         # 최근 커밋과 그 이전 커밋 사이의 변경된 파일 목록을 가져오는 Git 명령
@@ -45,20 +45,20 @@ def get_changed_files():
         return [] # Git 명령 실행 중 오류가 발생하면 빈 목록을 반환합니다.
 
 def review_code(client, file_path, content):
-    """Reviews Python code using the Gemini API, adding docstrings and inline comments.
+    """Gemini API를 사용하여 Python 코드를 검토하고, 독스트링과 인라인 주석을 추가합니다.
 
-    This function sends a prompt containing the file path and content to the Gemini
-    API, instructing it to add detailed docstrings and inline comments.  The logic
-    and behavior of the code must remain unchanged.  The response from the Gemini
-    API is then cleaned by removing any markdown code blocks.
+    이 함수는 파일 경로와 내용을 포함하는 프롬프트를 Gemini에 보냅니다.
+    API는 자세한 독스트링과 인라인 주석을 추가하도록 지시합니다. 논리
+    및 코드의 동작은 변경되지 않은 상태로 유지되어야 합니다. Gemini의 응답
+    API는 마크다운 코드 블록을 제거하여 정리됩니다.
 
     Args:
-        client (genai.Client): The configured Gemini API client.
-        file_path (str): The path to the Python file being reviewed.
-        content (str): The content of the Python file.
+        client (genai.Client): 구성된 Gemini API 클라이언트.
+        file_path (str): 검토 중인 Python 파일의 경로.
+        content (str): Python 파일의 내용.
 
-    Returns:
-        str: The reviewed code with added docstrings and comments, with markdown code blocks removed.
+    반환:
+        str: 마크다운 코드 블록이 제거된 독스트링과 주석이 추가된 검토된 코드.
     """
     prompt = f"""
     당신은 전문 기술 작가이자 코드 리뷰어입니다.
@@ -96,7 +96,7 @@ def expand_markdown(client, file_path, content):
         file_path (str): 확장할 Markdown 파일의 경로.
         content (str): Markdown 파일의 내용.
 
-    Returns:
+    반환:
         str: 마크다운 코드 블록이 제거된 확장된 Markdown 내용.
     """
     prompt = f"""
@@ -122,7 +122,7 @@ def expand_markdown(client, file_path, content):
     return cleaned_text
 
 def main():
-    """Main function to process changed files and update them with reviewed content."""
+    """변경된 파일을 처리하고 검토된 내용으로 업데이트하는 기본 함수입니다."""
     client = get_gemini_client() # Gemini API 클라이언트를 가져옵니다.
     changed_files = get_changed_files() # 변경된 파일 목록을 가져옵니다.
     
@@ -150,4 +150,4 @@ def main():
 
 if __name__ == "__main__":
     main() # 스크립트가 직접 실행되면 main 함수를 호출합니다.
-    
+```
