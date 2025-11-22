@@ -61,17 +61,17 @@ def review_code(client, file_path, content):
         str: The reviewed code with added docstrings and comments, with markdown code blocks removed.
     """
     prompt = f"""
-    You are an expert Technical Writer and Code Reviewer.
-    Analyze the following Python code.
+    당신은 전문 기술 작가이자 코드 리뷰어입니다.
+    다음 Python 코드를 분석해주세요.
     
-    Task:
-    1. Add detailed Docstrings (Google Style) to functions and classes.
-    2. Add inline comments explaining complex logic or technical details.
-    3. DO NOT change any variable names, function logic, or behavior.
-    4. ONLY return the full modified code. Do not use markdown code blocks ().
+    작업:
+    1. 함수와 클래스에 상세한 독스트링(Google 스타일)을 추가하세요.
+    2. 복잡한 로직이나 기술적 세부사항을 설명하는 인라인 주석을 추가하세요.
+    3. 변수명, 함수 로직, 동작을 변경하지 마세요.
+    4. 수정된 전체 코드만 반환하세요. 마크다운 코드 블록(```)은 사용하지 마세요.
     
-    File: {file_path}
-    Code:
+    파일: {file_path}
+    코드:
     {content}
     """
     
@@ -84,34 +84,33 @@ def review_code(client, file_path, content):
     return cleaned_text
 
 def expand_markdown(client, file_path, content):
-    """Expands the content of a Markdown file using the Gemini API.
+    """Gemini API를 사용하여 Markdown 파일의 내용을 확장합니다.
 
-    This function sends a prompt containing the file path and content to the Gemini
-    API, instructing it to expand on the concepts with technical depth and add
-    explanations for missing technical terms.  The original content should be
-    preserved, with improvements appended or inserted as necessary.  The response
-    from the Gemini API is then cleaned by removing any markdown code blocks.
+    이 함수는 파일 경로와 내용을 포함하는 프롬프트를 Gemini API에 전송하여,
+    기술적 깊이를 가지고 개념을 확장하고 누락된 기술 용어에 대한 설명을 추가하도록 지시합니다.
+    원본 내용은 유지되며, 필요에 따라 개선 사항을 추가하거나 삽입합니다.
+    Gemini API의 응답은 마크다운 코드 블록을 제거하여 정리됩니다.
 
     Args:
-        client (genai.Client): The configured Gemini API client.
-        file_path (str): The path to the Markdown file being expanded.
-        content (str): The content of the Markdown file.
+        client (genai.Client): 설정된 Gemini API 클라이언트.
+        file_path (str): 확장할 Markdown 파일의 경로.
+        content (str): Markdown 파일의 내용.
 
     Returns:
-        str: The expanded Markdown content, with markdown code blocks removed.
+        str: 마크다운 코드 블록이 제거된 확장된 Markdown 내용.
     """
     prompt = f"""
-    You are an expert Technical Writer.
-    Review the following Markdown content.
+    당신은 전문 기술 작가입니다.
+    다음 Markdown 내용을 검토해주세요.
     
-    Task:
-    1. If the content is brief, expand on the concepts with technical depth.
-    2. If there are missing explanations for technical terms, add them.
-    3. Keep the original content, but append or insert necessary improvements.
-    4. ONLY return the full modified markdown content. Do not use markdown code blocks ().
+    작업:
+    1. 내용이 간단하다면, 기술적 깊이를 가지고 개념을 확장하세요.
+    2. 기술 용어에 대한 설명이 누락된 경우 추가하세요.
+    3. 원본 내용은 유지하되, 필요한 개선사항을 추가하거나 삽입하세요.
+    4. 수정된 전체 마크다운 내용만 반환하세요. 마크다운 코드 블록(```)은 사용하지 마세요.
 
-    File: {file_path}
-    Content:
+    파일: {file_path}
+    내용:
     {content}
     """
     
