@@ -1,4 +1,3 @@
-```python
 import os
 import sys
 import subprocess
@@ -137,7 +136,8 @@ def main():
             content = f.read() # 파일 내용을 읽습니다.
 
         new_content = None
-        
+        if file_path in ['.github/scripts/code_review.py']:
+            continue # 이 스크립트와 특정 파일은 건너뜁니다.
         if file_path.endswith('.py'):
             new_content = review_code(client, file_path, content) # Python 파일인 경우 코드 리뷰를 수행합니다.
         elif file_path.endswith('.md'):
@@ -150,4 +150,3 @@ def main():
 
 if __name__ == "__main__":
     main() # 스크립트가 직접 실행되면 main 함수를 호출합니다.
-```
