@@ -1,4 +1,4 @@
-from langchain.openai import ChatOpenAI
+from langchain_openai import ChatOpenAI
 from langchain.prompts import ChatPromptTemplate
 
 from a2a.server.agent_execution import AgentExecutor, RequestContext
@@ -34,9 +34,12 @@ class HelloAgent:
         )
     async def invoke(self, user_message: str) -> str:
         """유저 메시지를 처리하고 응답을 생성합니다."""
-        chain= self.prompt | self.chat
-        response = await chain.ainvoke({"message": user_message})
-class HelloWorldAgentExecutor(AgentExecutor):
+        chain = self.prompt | self.chat
+        # 프롬프트 템플릿의 변수 {user_input}과 일치하도록 수정
+        # - "message" → "user_input" 으로 변경하여 KeyError 해결
+        response = await chain.ainvoke({"user_input": user_message})
+        return response.content
+class HelloAgentExecutor(AgentExecutor):
     """간단한 Hello World 에이전트의 Executor 구현"""
     def __init__(self):
         self.agent = HelloAgent()
@@ -66,3 +69,4 @@ class HelloWorldAgentExecutor(AgentExecutor):
             messageId="cancel_error"
         )
         event_queue.enqueue_event(error_message)
+

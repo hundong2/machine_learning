@@ -1,68 +1,81 @@
 """
 A2A(Agent to Agent) 프로토콜 기반 에이전트 서버 구현
 
-핵심 개념:
+핵심 개념(초보자용):
 - A2A: 에이전트끼리 표준 프로토콜로 통신하도록 정의한 명세
 - AgentCard: 에이전트의 정보(이름, 설명, 제공 기능)를 표준 JSON으로 나타낸 것
 - AgentSkill: AgentCard에 담기는 "에이전트가 할 수 있는 작업 단위"
+- Pydantic: 타입 검증과 JSON 직렬화를 자동화하는 라이브러리
+
+라이브러리 역할:
+- uvicorn: ASGI 웹 서버로, FastAPI 앱을 HTTP로 실행
+- a2a.server.apps (A2AFastAPIApplication): A2A 프로토콜을 FastAPI로 구현한 기본 앱
+- a2a.server.request_handlers (DefaultRequestHandler): 표준 요청 처리 로직
+- a2a.server.tasks (InMemoryTaskStore): 메모리 기반 작업 저장소
 """
 
-# ===== A2A 프로토콜 기본 타입들 =====
-# Pydantic 모델들로, 자동 타입 검증 및 JSON 직렬화 가능
-# - AgentCard: 에이전트 전체 정보를 표준 JSON으로 나타냄
+# ===== 라이브러리 임포트 =====
+
+# A2A 프로토콜 기본 타입들: 에이전트 정보를 구조화/검증하기 위한 Pydantic 모델
+# - AgentCard: 에이전트 전체 정보를 표준 JSON으로 나타낸 것
 # - AgentSkill: 에이전트가 제공하는 개별 기능/작업을 정의
 # - AgentCapabilities: 에이전트가 지원하는 추가 기능(스트리밍, 알림 등)
 from a2a.types import AgentCapabilities, AgentCard, AgentSkill
 
-# ===== 파일 경로 처리 =====
-# pathlib.Path: 파일 경로를 객체 지향적으로 다루는 라이브러리
-# - 크로스 플랫폼(Windows, Mac, Linux) 경로 차이 자동 처리
-# - Path(__file__).parent.parent: 현재 파일의 상위 디렉토리로 안전하게 이동
+# pathlib: 파일 경로를 객체 지향적으로 다루는 라이브러리
+# - Path(__file__).parent.parent로 현재 파일의 상위 디렉토리 경로를 안전하게 구성
 from pathlib import Path
 
-# ===== ASGI 웹 서버 =====
-# uvicorn: FastAPI/Starlette 같은 비동기 웹 앱을 HTTP 서버로 실행
+# uvicorn: ASGI(비동기) 웹 서버
+# - Python의 비동기 웹 앱(FastAPI, Starlette)을 HTTP 엔드포인트로 실행하는 역할
 # - 높은 동시성으로 여러 요청을 동시에 처리 가능
-# - 개발/프로덕션 모두 사용 가능
 import uvicorn
 import sys
 
+# ===== A2A 프로토콜 서버 컴포넌트 =====
+
 # 상위 디렉토리를 Python 모듈 검색 경로에 추가(상대 import를 위해)
-# sys.path.append(): 모듈을 검색할 디렉토리 경로를 등록
+# - Path(__file__).parent.parent: 현재 파일 위치의 상위 폴더
+# - sys.path.append(): 이 경로를 모듈 검색 경로에 등록
 sys.path.append(str(Path(__file__).parent.parent))
 
-# ===== A2A 프로토콜 서버 컴포넌트 =====
 # A2AFastAPIApplication: A2A 프로토콜을 FastAPI로 구현한 기본 웹 애플리케이션
-# - 표준 HTTP 엔드포인트 제공 (에이전트 카드 조회, 스킬 실행, 메시지 수신 등)
+# - 에이전트 카드 조회, 스킬 실행, 메시지 수신 등 표준 HTTP 엔드포인트 제공
 # - 다른 에이전트가 HTTP 요청으로 이 서버에 접근 가능
 from a2a.server.apps import A2AFastAPIApplication
 
 # DefaultRequestHandler: A2A 클라이언트(다른 에이전트)의 요청을 처리하는 표준 로직
 # - 스킬 실행 요청 수신, 결과 계산, 응답 반환
-# - 오류 처리 및 예외 상황 관리
+# - 오류 처리, 예외 상황 관리
 from a2a.server.request_handlers import DefaultRequestHandler
 
 # InMemoryTaskStore: 진행 중인 작업 상태를 메모리에 저장
 # - 작업 ID, 진행 상태, 결과 등을 관리
-# - 데이터베이스 대신 메모리 사용 (개발/테스트용, 프로덕션에서는 DB 사용 권장)
+# - 데이터베이스 대신 메모리 사용 (개발/테스트용)
 from a2a.server.tasks import InMemoryTaskStore
 
 # 에이전트 실행 로직이 담긴 모듈
 # - 실제 "인사 기능"을 수행하는 HelloWorldAgentExecutor 클래스 포함
-from basic_agent.agent_executor import HelloAgentExecutor
+from basic_agent.agent_executor import HelloWorldAgentExecutor
+
+# ===== 에이전트 정보 정의 =====
 
 def create_agent_card() -> AgentCard:
     """에이전트 카드 생성 함수
     
-    목적: A2A 프로토콜을 따르는 표준 JSON 형식으로 
-          "이 에이전트가 뭘 할 수 있는가"를 명시
-    반환: AgentCard(Pydantic BaseModel)로 다른 에이전트/클라이언트가 이해 가능한 정보
+    목적: 
+    - A2A 프로토콜을 따르는 표준 JSON 형식으로 
+      "이 에이전트가 뭘 할 수 있는가"를 명시
+    
+    반환: 
+    - AgentCard(Pydantic BaseModel)로, 
+      다른 에이전트/클라이언트가 이해할 수 있는 정보 제공
     """
     
     # ===== Step 1: 에이전트가 수행할 수 있는 "스킬"(작업) 정의 =====
     # AgentSkill: Pydantic의 BaseModel을 상속해 필드 타입/필수 여부를 자동 검증
     greeting_skill = AgentSkill(
-        # ===== 필수 필드들 =====
+        # 필수 필드들
         id="basic_greeting",
         # - 스킬을 구별하는 고유 식별자
         # - 다른 스킬과 중복되면 안 됨
@@ -75,7 +88,7 @@ def create_agent_card() -> AgentCard:
         # - 스킬의 기능을 설명하는 텍스트
         # - 클라이언트가 이 스킬을 선택할 때 참고
         
-        # ===== 선택 필드들 (optional): 메타데이터로 검색/필터링에 사용 =====
+        # 선택 필드들 (optional): 메타데이터로 검색/필터링에 사용
         tags=["greeting", "hello", "basic"],
         # - 카테고리/검색용 태그
         # - 클라이언트가 비슷한 스킬들을 찾을 때 사용
@@ -96,7 +109,7 @@ def create_agent_card() -> AgentCard:
     # ===== Step 2: 전체 에이전트 정보(카드)를 구성 =====
     # AgentCard도 Pydantic BaseModel: 모든 필드가 타입 검증되고 JSON으로 직렬화 가능
     agent_card = AgentCard(
-        # ===== 필수 정보 =====
+        # 필수 정보
         name="Basic Hello World Agent",
         # - 에이전트의 이름
         # - 다른 에이전트/클라이언트에서 식별할 때 사용
@@ -114,7 +127,7 @@ def create_agent_card() -> AgentCard:
         # - 에이전트의 버전
         # - 업데이트 추적이나 호환성 확인에 사용
         
-        # ===== 선택 정보 =====
+        # 선택 정보
         default_input_modes=["text"],
         # - 기본 입력 형식
         # - 클라이언트가 명시하지 않으면 이 형식 사용
@@ -138,7 +151,10 @@ def create_agent_card() -> AgentCard:
         # - False: 인증 없이 누구나 이 에이전트 사용 가능
         # - True: 특정 사용자/권한만 사용 가능 (향후 기능)
     )
+    
     return agent_card
+
+# ===== 메인 실행 로직 =====
 
 def main():
     """에이전트 카드를 생성해 표준 JSON 형식으로 출력
@@ -155,43 +171,19 @@ def main():
     # - 다른 에이전트가 HTTP GET으로 이 정보를 받아 상호작용 가능
     # - indent=2를 추가하면 보기 좋게 포맷팅: agent_card.model_dump_json(indent=2)
     print(agent_card.model_dump_json())
-    port = 9999
-    host = "0.0.0.0"
-    print("hello world agent server start at http://{}:{}".format(host, port))
-    print("Agent Card: http://{}:{}/.well-known/agent.json".format(host, port))
-
-    request_handler = DefaultRequestHandler(
-        agent_executor=HelloAgentExecutor(),
-        task_store=InMemoryTaskStore()
-    )
-    server = A2AFastAPIApplication(
-        agent_card=agent_card,
-        http_handler=request_handler
-    )
-
-    app = server.build()
-    uvicorn.run(app, host=host, port=port)
 
 # ===== 진입점 =====
+
 if __name__ == "__main__":
     # 이 파일을 직접 실행할 때만 main() 호출
     # - import로 사용될 때는 실행 안 됨
     # - 다른 파일에서 create_agent_card()만 임포트해서 사용 가능
     main()
 
-"""
-{"additionalInterfaces":null,"capabilities":{"extensions":null,"pushNotifications":null,"stateTransitionHistory":null,"streaming":true},"defaultInputModes":["text"],"defaultOutputModes":["text"],"description":"A2A 프로토콜을 학습하기 위한 기본적인 Hello World 에이전트입니다.","documentationUrl":null,"iconUrl":null,"name":"Basic Hello World Agent","preferredTransport":"JSONRPC","protocolVersion":"0.3.0","provider":null,"security":null,"securitySchemes":null,"signatures":null,"skills":[{"description":"간단한 인사와 기본적인 대화를 제공합니다.","examples":["안녕하세요","hello","hi","고마워요"],"id":"basic_greeting","inputModes":["text"],"name":"Basic Greeting","outputModes":["text"],"security":null,"tags":["greeting","hello","basic"]}],"supportsAuthenticatedExtendedCard":null,"url":"http://localhost:9999/","version":"1.0.0"}
-hello world agent server start at http://0.0.0.0:9999
-Agent Card: http://0.0.0.0:9999/.well-known/agent.json
-INFO:     Started server process [15772]
-INFO:     Waiting for application startup.
-INFO:     Application startup complete.
-INFO:     Uvicorn running on http://0.0.0.0:9999 (Press CTRL+C to quit)
-Deprecated agent card endpoint '/.well-known/agent.json' accessed. Please use '/.well-known/agent-card.json' instead. This endpoint will be removed in a future version.
-INFO:     127.0.0.1:51770 - "GET /.well-known/agent.json HTTP/1.1" 200 OK
-===== 출력 결과 예시 및 각 필드 설명 =====
+# ===== 출력 예시 및 각 필드 설명 =====
 
-JSON 형식 출력 샘플과 각 필드의 의미:
+"""
+json 형식 출력 샘플:
 
 {
     "additionalInterfaces": null,
