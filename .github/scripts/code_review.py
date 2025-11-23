@@ -114,7 +114,7 @@ def expand_markdown(client, file_path, content):
     """
     
     response = client.models.generate_content(
-        model="gemini-3-pro-preview",
+        model="gemini-2.0-flash",
         contents=prompt
     ) # Gemini API를 호출하여 Markdown 콘텐츠를 확장합니다.
     cleaned_text = response.text.replace("markdown", "").replace("", "") # 생성된 텍스트에서 "markdown"과 ""를 제거합니다.
