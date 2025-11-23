@@ -62,6 +62,7 @@ def review_code(client, file_path, content):
     prompt = f"""
     당신은 전문 기술 작가이자 코드 리뷰어입니다.
     다음 Python 코드를 분석해주세요.
+    그리고 코드 원본은 건드리면 안됩니다. 주석으로만 설명 내용을 상세히 추가해 주세요. 
     
     작업:
     1. 함수와 클래스에 상세한 독스트링(Google 스타일)을 추가하세요.
@@ -101,6 +102,7 @@ def expand_markdown(client, file_path, content):
     prompt = f"""
     당신은 전문 기술 작가입니다.
     다음 Markdown 내용을 검토해주세요.
+    그리고 원본 데이터는 절대 건드리면 안되고 내용을 추가하기만 해야 합니다. 
     
     작업:
     1. 내용이 간단하다면, 기술적 깊이를 가지고 개념을 확장하세요.

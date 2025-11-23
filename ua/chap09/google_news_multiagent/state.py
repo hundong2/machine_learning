@@ -1,4 +1,3 @@
-```python
 from typing import Annotated, Any
 from pydantic import BaseModel, ConfigDict
 from langchain_core.messages import BaseMessage
@@ -20,4 +19,3 @@ class NewsState(BaseModel):
     raw_news: list[dict[str, Any]] = []
     # 요약된 뉴스 데이터를 저장합니다. 각 항목은 요약된 뉴스 기사의 속성을 담은 사전입니다.
     summarized_news: list[dict[str, Any]] = []
-```
