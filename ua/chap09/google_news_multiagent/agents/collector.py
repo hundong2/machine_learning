@@ -1,3 +1,4 @@
+```python
 #RSS 수집 에이전트 
 import json
 import re
@@ -17,19 +18,37 @@ GOOGLE_NEWS_API_URL = f"{GOOGLE_NEWS_BASE_URL}/_/DotsSplashUi/data/batchexecute"
 KOREA_PARAMS ="&hl=ko&gl=KR&ceid=KR:ko"
 
 class RSSCollectorAgent:
-    """RSS 피드를 수집하는 에이전트"""
+    """RSS 피드를 수집하는 에이전트
+
+    Attributes:
+        name (str): 에이전트 이름.
+        rss_url (str): 구글 뉴스 RSS 피드 URL.
+        feed (feedparser.FeedParserDict): 파싱된 RSS 피드 데이터.
+
+    """
     def __init__(self):
+        """RSSCollectorAgent 초기화."""
         self.name = "RSS Collector"
         self.rss_url = f"{GOOGLE_NEWS_BASE_URL}/rss?{KOREA_PARAMS[1:]}"
         self.feed = None
     def load_feed(self) -> None:
-        """RSS 피드를 로드합니다."""
+        """RSS 피드를 로드합니다.
+
+        RSS 피드를 파싱하여 self.feed에 저장합니다.
+        """
         self.feed = feedparser.parse(self.rss_url)
         # feedparser는 RSS/Atom 피드를 파싱하는 파이썬 라이브러리 
         #XML 형식의 RSS 피드를 파싱하여 파이선 객체로 변환해줍니다.  feedparser 가 없다면 httpx를 사용하여 XML을 가져오고 파싱하는 과정이 필요
     @staticmethod
     def extract_chosun_content(html_content):
-        """Josun Ilbo 뉴스 콘텐츠 추출"""
+        """Josun Ilbo 뉴스 콘텐츠 추출
+
+        Args:
+            html_content (str): HTML 콘텐츠.
+
+        Returns:
+            str: 추출된 텍스트 콘텐츠 또는 빈 문자열 (오류 발생 시).
+        """
         pattern = r"Fusion\.globalContent\s*=\s*({.*?});"
         match = re.search(pattern, html_content, re.DOTALL)
 
@@ -47,7 +66,14 @@ class RSSCollectorAgent:
     async def extract_article_url(self, google_news_url: str) -> Optional[str]:
         """Stack Overflow 뉴스 기사 URL 추출
         https://stackoverflow.com/questions/7938897/how-to-scrape-google-rssfeed-links/79388987#79388987
-        google news는 JavaScript를 사용하여 페이지를 리다이렉션시키므로 내부 API를 직접호출하여 우회"""
+        google news는 JavaScript를 사용하여 페이지를 리다이렉션시키므로 내부 API를 직접호출하여 우회
+
+        Args:
+            google_news_url (str): 구글 뉴스 URL.
+
+        Returns:
+            Optional[str]: 원본 기사 URL, 추출 실패시 None.
+        """
         async with httpx.AsyncClient() as client:
             try:
                 #c-wiz component data extract from google news page 
@@ -91,7 +117,14 @@ class RSSCollectorAgent:
             except Exception:
                 return None
     async def parse_entry(self, entry) -> dict[str, Optional[str]]:
-        """RSS 피드 항목을 파싱합니다."""
+        """RSS 피드 항목을 파싱합니다.
+
+        Args:
+            entry (feedparser.FeedParserDict): 개별 RSS 피드 항목.
+
+        Returns:
+            dict[str, Optional[str]]: 파싱된 데이터 (제목, 게시 시간, 출처, URL, 콘텐츠).
+        """
         google_news_url = entry.link + KOREA_PARAMS
         original_url = await self.extract_article_url(google_news_url)
         content = ""
@@ -120,7 +153,14 @@ class RSSCollectorAgent:
             "content": content
         }
     async def collect_rss(self, state: NewsState) -> NewsState:
-        """RSS 피드를 수집하고 상태를 업데이트합니다."""
+        """RSS 피드를 수집하고 상태를 업데이트합니다.
+
+        Args:
+            state (NewsState): 현재 뉴스 상태.
+
+        Returns:
+            NewsState: 업데이트된 뉴스 상태.
+        """
         try:
             if not self.feed:
                 self.load_feed()
@@ -135,5 +175,4 @@ class RSSCollectorAgent:
             state.error_log.append(f"RSS 수집 오류: {e}")
         return state
         
-
-
+```
