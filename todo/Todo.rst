@@ -65,3 +65,10 @@
 ----
 - 순위는 스타 수, 최근 커밋 활동, 산업 활용 레퍼런스 등을 종합한 실무 체감 기준입니다.
 - 실제 도입 시 라이선스(상업 이용 제한 여부)와 하드웨어 요구사항을 확인하세요.
+
+7) Reference Links
+---------------------------------
+
+- [awesome-open-source-ai](https://github.com/ai-boost/awesome-prompts/tree/main)  
+- [Research Site](https://app.liner.com/). 
+
