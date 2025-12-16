@@ -1,93 +1,218 @@
-# Researcher 에이전트 코드 설명
+# 예산 인식 Researcher 에이전트 가이드
+LangGraph로 예산을 고려해 검색/브라우징을 조절하며 답변을 생성하는 에이전트를 초보자도 따라 만들 수 있게 단계별로 설명합니다.
 
-이 문서는 `researcher/main.py`의 예산 인식 에이전트(BATS 아이디어 반영) 구현을 간단히 설명합니다.
+## 예시 파일
+[researcher/main.py (예시 실행 파일)](https://github.com/hundong2/machine_learning/blob/main/researcher/main.py)
 
-## 구성 개요
-- `AgentState`: 에이전트 상태를 정의하는 `TypedDict`.
-  - 질문, 대화 기록, 계획, 예산 상태(`search_total/used`, `browse_total/used`), 궤적, 답변 후보, 도구 결과, 통합 비용, 시도 횟수 등.
-- 툴 더미:
-  - `search_tool_mock(query)`: 검색 결과 문자열 반환.
-  - `browse_tool_mock(url, goal)`: 브라우징 결과 문자열 반환.
-- LLM 예시:
-  - `ChatGoogleGenerativeAI(model="gemini-pro")`로 예시 객체만 초기화(실제 호출은 시뮬레이션).
+## 답변
+아래 가이드는 개념 → 작은 예제 → 확장 순으로 진행하며, 실행 가능한 코드 조각과 함께 LangGraph/LLM 연동의 핵심을 설명합니다.
 
-## 그래프 노드
-- `think_and_plan_node(state)`
-  - 예산 상태(남은 검색/탐색 횟수)에 기반해 전략(HIGH/MEDIUM/LOW/CRITICAL) 텍스트 생성.
-  - 다음 행동(`next_action_type`)을 결정하고 필요 시 `proposed_tool_call` 설정.
-  - 궤적과 대화 기록에 사고 내용을 누적.
-- `call_tool_node(state)`
-  - 제안된 도구 호출을 실행하고 결과를 `tool_results`에 추가.
-  - 예산 사용량(`search_used/browse_used`)과 `unified_cost` 업데이트.
-- `verify_node(state)`
-  - 현재 답변/궤적/예산을 평가하여 `verification_decision`을 설정(SUCCESS/CONTINUE/PIVOT).
-  - 시도 횟수 증가 및 요약 기반 컨텍스트 축약.
-- `generate_answer_node(state)`
-  - 검증 성공 시 기존 답변을 확정, 아니면 규칙에 따라 `None` 또는 가상 답변 생성.
-  - 최종 답변을 `final_verified_answers` 및 `chat_history`에 누적.
+### 1) 핵심 개념 빠르게 잡기
+- 상태(State): 에이전트의 진행 상황을 담은 딕셔너리. 예산, 도구 결과, 답변 후보 등.
+- 노드(Node): 상태를 입력받아 새로운 상태를 반환하는 함수. 사고/계획, 도구 호출, 검증, 최종 답변 등.
+- 간선(Edge): 다음에 실행할 노드를 결정하는 연결.
+- 라우터(Router): 상태를 보고 분기 키를 반환해 간선 매핑으로 다음 노드를 선택.
 
-## 라우팅 함수
-- `route_from_think_plan(state)`
-  - tool → `call_tool_node`, answer → `generate_answer_node`, stop → `END`.
-- `route_after_verification(state)`
-  - SUCCESS → `generate_answer_node`, CONTINUE/PIVOT → `think_plan_node` (단, 최대 시도 초과 시 `generate_answer_node`).
+간단 도식: 사고(plan) → 도구(tool) → 검증(verify) → 답변(answer)
 
-## 그래프 빌드
-- `StateGraph(AgentState)` 생성 후 다음을 등록:
-  - 노드: `think_plan_node`, `call_tool_node`, `verify_node`, `generate_answer_node`.
-  - 간선: `add_edge`, `add_conditional_edges`로 라우팅 구성.
-  - 시작점: `set_entry_point("think_plan_node")`.
-  - `compile()`로 앱 생성.
+### 2) 최소 실행 예제로 구조 이해하기
+아래 코드는 상태 스키마와 노드 2개만으로 “사고 → 답변” 흐름을 보여줍니다.
 
-## 실행 힌트
-실행 하네스 예시(주석 참고)를 바탕으로 `app.invoke(initial_state)`로 단위 테스트 가능합니다. 실제 LLM을 연결하려면 `.env`의 `GOOGLE_API_KEY`를 로드하고, `llm.invoke` 응답 파싱(<answer> 태그) 로직을 추가하세요.
+```python
+from typing import TypedDict, List
+from langgraph.graph import StateGraph, END
 
-## 설계 포인트
-- 예산 기반 전략 분류는 남은/총 비율로 단순·명확화했습니다.
-- 모든 노드가 상태를 **불변식으로 업데이트**하며, 히스토리/궤적을 누적해 컨텍스트 손실을 줄입니다.
-- 검증 노드는 결정에 따라 시도 횟수와 컨텍스트 요약을 관리해 비용을 억제합니다.
+class AgentState(TypedDict):
+    question: str
+    chat_history: List[str]
+    plan: str
+    final_verified_answers: List[str]
+    next_action_type: str
 
-## 사용 라이브러리 상세 안내 (지침서)
+def think_and_plan_node(state: AgentState) -> AgentState:
+    plan = f"질문 분석: {state['question']} → 간단 답변 시도"
+    state['plan'] = plan
+    state['chat_history'].append(plan)
+    state['next_action_type'] = 'answer'
+    return state
 
-- `typing`
-  - `TypedDict`: 딕셔너리 형태의 구조적 타입 정의. 키/값 타입을 명시해 상태 스키마를 안정적으로 관리.
-  - `List`, `Dict`, `Literal`: 리스트/딕셔너리/리터럴(허용 값 집합) 타입 힌트.
+def generate_answer_node(state: AgentState) -> AgentState:
+    answer = f"요약 답변: {state['question']}에 대한 핵심 포인트"
+    state['final_verified_answers'].append(answer)
+    state['chat_history'].append(answer)
+    state['next_action_type'] = 'stop'
+    return state
 
-- `langgraph`
-  - `StateGraph`: 상태 기반 워크플로우를 구성하는 그래프 빌더.
-    - `add_node(name, fn)`: 노드(함수)를 그래프에 등록.
-    - `add_edge(src, dst)`: 단일 경로 간선 추가.
-    - `add_conditional_edges(src, router_fn, mapping)`: 분기 라우팅. `router_fn(state)` 반환값을 `mapping` 키로 매핑해 다음 노드 결정.
-    - `set_entry_point(name)`: 시작 노드 지정.
-    - `compile()`: 실행 가능한 앱으로 컴파일. `app.invoke(state)` 호출.
+def route_from_think_plan(state: AgentState) -> str:
+    return {
+        'answer': 'generate_answer_node',
+        'stop': END,
+    }.get(state['next_action_type'], 'generate_answer_node')
 
-- `langchain_core.messages`
-  - `BaseMessage`, `HumanMessage`: LLM과의 대화 메시지 모델. `HumanMessage(content=...)`로 사용자/내부 메시지 기록.
+graph = StateGraph(AgentState)
+graph.add_node('think_plan_node', think_and_plan_node)
+graph.add_node('generate_answer_node', generate_answer_node)
+graph.add_conditional_edges('think_plan_node', route_from_think_plan, {
+    'generate_answer_node': 'generate_answer_node',
+    END: END,
+})
+graph.set_entry_point('think_plan_node')
+app = graph.compile()
 
-- `langchain_core.pydantic_v1`
-  - `BaseModel`, `Field`: 인자 스키마 검증용(툴 인자 등). `Field(description=...)`로 문서화.
+initial = {
+    'question': 'Gradient Descent란?',
+    'chat_history': [],
+    'plan': '',
+    'final_verified_answers': [],
+    'next_action_type': '',
+}
 
-- `langchain_google_genai`
-  - `ChatGoogleGenerativeAI`: Google Gemini 채팅 모델 래퍼.
-    - 주요 인자: `model`(예: `gemini-pro`, `gemini-3.0-pro`), `api_key`, `temperature`.
-    - `invoke(messages)`: LangChain 메시지 배열을 입력해 응답 객체 반환. `response.content`에 텍스트.
+result = app.invoke(initial)
+print(result['final_verified_answers'][-1])
+```
 
-- `python-dotenv`
-  - `load_dotenv()`: `.env` 파일의 환경 변수를 현재 프로세스에 로드.
-    - 본 코드에서 `GOOGLE_API_KEY`를 로드해 LLM에 전달.
+실행 결과는 질문에 대한 간단 요약입니다. 여기서 도구 호출/검증을 단계적으로 추가해 갑니다.
 
-### 자주 하는 실수와 팁
-- 그래프 API 메서드명 혼동
-  - `addnode`가 아니라 `add_node`, `setentrypoint`가 아니라 `set_entry_point`.
-- 라우팅 매핑 키 일치
-  - `route_from_think_plan`이 반환하는 문자열과 `add_conditional_edges`의 매핑 키가 정확히 동일해야 함.
-- LLM 응답 파싱
-  - 태그 기반(`<answer>`) 파싱은 간단하지만, 모델이 태그를 생략할 수 있어 예외 처리와 기본값(`None`)을 준비.
-- 예산 계산 일관성
-  - `remaining = total - used` 공식을 함수/노드 전반에서 동일하게 사용하면 상태 누락에도 안전.
+### 3) 예산을 고려한 도구 호출 추가
+검색/브라우징 예산을 상태에 넣고, “도구를 쓸지 바로 답변할지” 결정합니다.
 
-### 빠른 시작 명령어
+```python
+from typing import Literal
+
+class AgentState(TypedDict):
+    question: str
+    chat_history: List[str]
+    plan: str
+    final_verified_answers: List[str]
+    next_action_type: Literal['tool','answer','stop']
+    # 예산
+    search_total: int
+    search_used: int
+
+def search_tool_mock(query: str) -> str:
+    return f"[검색 결과] {query} 관련 상위 요약"
+
+def think_and_plan_node(state: AgentState) -> AgentState:
+    remaining = state['search_total'] - state['search_used']
+    if remaining > 0:
+        state['plan'] = '한 번 검색 후 답변 생성'
+        state['next_action_type'] = 'tool'
+    else:
+        state['plan'] = '예산 없음: 직접 답변'
+        state['next_action_type'] = 'answer'
+    state['chat_history'].append(state['plan'])
+    return state
+
+def call_tool_node(state: AgentState) -> AgentState:
+    result = search_tool_mock(state['question'])
+    state['chat_history'].append(result)
+    state['search_used'] += 1
+    state['next_action_type'] = 'answer'
+    return state
+
+def route_from_think_plan(state: AgentState) -> str:
+    if state['next_action_type'] == 'tool':
+        return 'call_tool_node'
+    if state['next_action_type'] == 'answer':
+        return 'generate_answer_node'
+    return END
+```
+
+이제 남은 예산에 따라 검색을 1회 수행한 뒤 답변으로 이동합니다.
+
+### 4) 검증 노드로 무한 루프 방지하기
+LangGraph의 `GraphRecursionError`는 보통 라우팅이 “계속 같은 노드로 되돌아가는” 경우 발생합니다. 검증 노드를 넣어 종료 신호를 명확히 만듭니다.
+
+```python
+def verify_node(state: AgentState) -> AgentState:
+    # 매우 단순한 검증: 히스토리에 검색 결과가 있으면 성공
+    success = any('[검색 결과]' in h for h in state['chat_history'])
+    state['chat_history'].append(f"검증결과: {'SUCCESS' if success else 'CONTINUE'}")
+    state['next_action_type'] = 'stop' if success else 'answer'
+    return state
+
+# 간선 설계 예시
+# call_tool_node → verify_node → (SUCCESS: stop / CONTINUE: answer)
+```
+
+검증을 통해 “정지(stop)”로 라우팅되면 그래프가 종료되어 재귀 한도를 넘지 않습니다.
+
+### 5) LLM 연동과 <answer> 파싱 예제
+Gemini와 연결할 때는 `.env`의 `GOOGLE_API_KEY`를 로드하고, 모델이 `<answer>...</answer>`를 포함하도록 프롬프트를 구성합니다.
+
+```python
+import os
+from dotenv import load_dotenv
+from langchain_google_genai import ChatGoogleGenerativeAI
+from langchain_core.messages import HumanMessage
+
+load_dotenv()
+llm = ChatGoogleGenerativeAI(model="gemini-3.0-pro", api_key=os.getenv('GOOGLE_API_KEY'))
+
+def parse_answer(text: str) -> str:
+    start, end = text.find('<answer>'), text.find('</answer>')
+    if start != -1 and end != -1 and end > start:
+        return text[start+9:end].strip()
+    return 'None'
+
+def generate_answer_node(state: AgentState) -> AgentState:
+    prompt = f"질문: {state['question']}\n<answer>핵심만 요약해줘</answer>"
+    r = llm.invoke([HumanMessage(content=prompt)])
+    content = getattr(r, 'content', '') or str(r)
+    answer = parse_answer(content)
+    state['final_verified_answers'].append(answer)
+    state['chat_history'].append(f"LLM응답: {answer}")
+    state['next_action_type'] = 'stop'
+    return state
+```
+
+LLM이 태그를 누락해도 안전하게 기본값 `'None'`으로 처리합니다.
+
+### 6) 전체 실행 예시와 명령어
+아래 명령으로 실행하고 결과 키를 확인하세요.
+
 ```bash
 python researcher/main.py
 ```
-실행 후 출력되는 딕셔너리에서 `final_verified_answers`, `verification_decision`, `tool_results` 등을 확인하세요.
+
+확인할 필드: `final_verified_answers`, `chat_history`, `search_used` 등.
+
+### 7) 라이브러리와 올바른 임포트
+- `typing`: `TypedDict`, `Literal`, `List` 등으로 상태 스키마를 안정적으로 정의.
+- `langgraph`: `StateGraph`, `add_node`, `add_edge`, `add_conditional_edges`, `set_entry_point`, `compile`.
+- `langchain_core.messages`: `HumanMessage`로 프롬프트를 전달.
+- `pydantic`: 도구 인자 스키마가 필요하다면 `from pydantic import BaseModel, Field`를 사용하세요. (이전 `langchain_core.pydantic_v1` 대신 권장)
+- `python-dotenv`: `.env`의 `GOOGLE_API_KEY`를 로드.
+- `langchain_google_genai`: `ChatGoogleGenerativeAI`로 Gemini 호출.
+
+### 8) 자주 하는 실수와 해결법
+- 매핑 키 불일치: 라우터가 반환하는 문자열과 `add_conditional_edges` 매핑 키가 다르면 잘못된 노드로 흐르거나 루프가 생깁니다.
+- 종료 신호 누락: 어떤 분기에서도 `stop`에 도달하지 않으면 재귀 한도 초과 에러.
+- 검증 후 라우팅: 검증이 항상 같은 노드로 되돌리면 루프가 생깁니다. 성공 시 `stop`, 실패 시 다른 노드로 이동.
+- 예산 갱신 누락: `used`를 늘리지 않으면 라우팅 로직이 계속 도구 호출을 선택할 수 있습니다.
+
+### 9) LangGraph 재귀 한도(Recursion) 오류 대처 체크리스트
+- `config={"recursion_limit": 50}`를 늘릴 수 있지만, 근본 해결은 라우팅입니다.
+- 각 분기에 대해 다음을 점검하세요:
+  - 최소 한 경로는 `END`로 이어지나?
+  - 동일 노드로 무한 회귀하는 경로가 없나?
+  - 검증 노드에서 성공 시 `stop`으로 확실히 이동하나?
+  - 실패 시 다른 노드로 이동하며 상태가 변해 다음 분기 결과가 바뀌나?
+
+## 추가 자료
+- LangGraph Errors: https://docs.langchain.com/oss/python/langgraph/errors/GRAPH_RECURSION_LIMIT
+- LangGraph Routing: https://langchain-ai.github.io/langgraph/concepts/low_level/#conditional-edges
+- Google AI Python SDK: https://python.langchain.com/docs/integrations/chat/google_generative_ai
+- Pydantic 사용 가이드: https://docs.pydantic.dev/latest/
+
+# 예산 인식 Researcher 에이전트 가이드
+LangGraph로 예산을 고려해 검색/브라우징을 조절하며 답변을 생성하는 에이전트를 초보자도 따라 만들 수 있게 단계별로 설명합니다.
+## 예시 파일
+[researcher/main.py (예시 실행 파일)](https://github.com/hundong2/machine_learning/blob/main/researcher/main.py)
+## 답변
+아래 가이드는 개념 → 작은 예제 → 확장 순으로 진행하며, 실행 가능한 코드 조각과 함께 LangGraph/LLM 연동의 핵심을 설명합니다.
+### 추가 자료
+- [LangGraph Errors](https://docs.langchain.com/oss/python/langgraph/errors/GRAPH_RECURSION_LIMIT)
+- [LangGraph Routing](https://langchain-ai.github.io/langgraph/concepts/low_level/#conditional-edges)
+- [Google AI Python SDK](https://python.langchain.com/docs/integrations/chat/google_generative_ai)
+- [Pydantic 사용 가이드](https://docs.pydantic.dev/latest/)
