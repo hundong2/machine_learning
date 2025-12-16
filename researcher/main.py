@@ -454,7 +454,6 @@ def main():
     graph_builder.add_node("generate_answer_node", generate_answer_node)
 
     # 간선 구성
-    graph_builder.add_edge("think_plan_node", "call_tool_node")  # 기본 흐름 예시
     graph_builder.add_conditional_edges(
         "think_plan_node",
         route_from_think_plan,
@@ -497,7 +496,7 @@ def main():
         "proposed_tool_call": {},
         "verification_decision": "NONE",
     }
-    result = app.invoke(initial_state, config={"recursion_limit": 5})
+    result = app.invoke(initial_state, config={"recursion_limit": 50})
     print(result)
 
 if __name__ == "__main__":
