@@ -1,0 +1,21 @@
+[project]
+name = "researcher"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.14"
+dependencies = [
+	"langgraph>=0.2.38",
+	"langchain-core>=0.3.15",
+	"langchain-google-genai>=2.0.0",
+	"python-dotenv>=1.0.1",
+	"pydantic>=2.12.5",
+]
+
+# 개발 편의용(dev) 그룹: Jupyter 커널 등
+[project.optional-dependencies]
+dev = [
+	"ipykernel>=6.29.5",
+]
+
+# uv 사용 시 그룹 설치 예: `uv add --dev ipykernel`
