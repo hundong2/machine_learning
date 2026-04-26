@@ -1,3 +1,7 @@
+# study history
+
+- [2026-04-26](https://developers.google.com/machine-learning/crash-course/numerical-data/programming-exercises?hl=ko). 
+
 # Linear regression: Parameters exercise
 
 The graph below plots 20 examples from a fuel-efficiency dataset, with the
