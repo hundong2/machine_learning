@@ -1172,6 +1172,7 @@ version = "0.1.0"
 source = { virtual = "kaggle-guide" }
 dependencies = [
     { name = "catboost" },
+    { name = "ipykernel" },
     { name = "jupyter" },
     { name = "jupyterlab" },
     { name = "kaggle" },
@@ -1193,6 +1194,7 @@ dependencies = [
 [package.metadata]
 requires-dist = [
     { name = "catboost", specifier = ">=1.2" },
+    { name = "ipykernel", specifier = ">=7.2.0" },
     { name = "jupyter", specifier = ">=1.0" },
     { name = "jupyterlab", specifier = ">=4.0" },
     { name = "kaggle", specifier = ">=1.5" },

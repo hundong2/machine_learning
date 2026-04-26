@@ -1,0 +1,65 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg
+*.egg-info/
+dist/
+build/
+.eggs/
+
+# 가상환경
+venv/
+env/
+ENV/
+.venv/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Jupyter
+.ipynb_checkpoints/
+*.ipynb_checkpoints
+
+# Isaac Sim 캐시 / 로그
+kit_*.log
+*.omni.log
+logs/
+.cache/
+omniverse_cache/
+
+# 학습 결과
+runs/
+tensorboard/
+checkpoints/
+*.pth
+*.pt
+*.ckpt
+wandb/
+
+# 센서 출력 (예제 실행 결과물)
+outputs/
+*.png
+*.jpg
+!docs/**/*.png
+!docs/**/*.jpg
+*.mp4
+*.avi
+
+# USD 임시 파일
+*.usd.bak
+*.usda.bak
+
+# 환경 변수
+.env
+.env.local
+
+# OS
+Thumbs.db

@@ -1,0 +1,20 @@
+# Isaac Sim 초보자 가이드 의존성
+# Isaac Sim 5.0은 별도 설치 필요 (docs/INSTALLATION.md 참조)
+#   pip install isaacsim==5.0.0 --extra-index-url https://pypi.nvidia.com
+
+# 과학 계산
+numpy>=1.24.0
+scipy>=1.11.0
+
+# 시각화 (센서 예제용)
+matplotlib>=3.7.0
+Pillow>=10.0.0
+
+# 강화학습 (examples/05_reinforcement_learning)
+gymnasium>=0.29.0
+stable-baselines3>=2.2.0
+tensorboard>=2.15.0
+
+# 유틸리티
+tqdm>=4.66.0
+pyyaml>=6.0
