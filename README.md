@@ -6,9 +6,11 @@
 - [ ] [google adk](./google/google_adk/README.md).    
 - [ ] [essential mathematics-for-ai](./essential-mathematics-for-ai/README.md).   
 - [ ] [for kaggle study](./kaggle-guide/README.md). 
+    - 2026.04.30
 - [ ] [Nvidia Issac Sim](./nvidia/isaac-sim-beginner-guide/README.md). 
+    - 2026.04.30
 - [ ] [VLM Vision study](./VLM_Vision_Study/README.md). 
-
+    - 2026.05.01
 
 # conda install
 
