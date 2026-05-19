@@ -523,6 +523,7 @@ version = "0.1.0"
 source = { virtual = "dacon" }
 dependencies = [
     { name = "ipykernel" },
+    { name = "lightgbm" },
     { name = "pandas" },
     { name = "scikit-learn" },
     { name = "statsmodels" },
@@ -531,6 +532,7 @@ dependencies = [
 [package.metadata]
 requires-dist = [
     { name = "ipykernel", specifier = ">=7.2.0" },
+    { name = "lightgbm", specifier = ">=4.6.0" },
     { name = "pandas", specifier = ">=3.0.2" },
     { name = "scikit-learn", specifier = ">=1.8.0" },
     { name = "statsmodels", specifier = ">=0.14.6" },
