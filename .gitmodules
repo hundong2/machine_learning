@@ -4,3 +4,5 @@
 [submodule "VLM_Vision_Study"]
 	path = VLM_Vision_Study
 	url = https://github.com/hundong2/VLM_Vision_Study.git
+[submodule "MathForDeepLearning"]
+	path = MathForDeepLearning
