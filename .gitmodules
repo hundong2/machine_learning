@@ -6,3 +6,7 @@
 	url = https://github.com/hundong2/VLM_Vision_Study.git
 [submodule "MathForDeepLearning"]
 	path = MathForDeepLearning
+	url = https://github.com/hundong2/MathForDeepLearning.git
+[submodule "Hands-On-Learning-in-Computer-Vision"]
+	path = Hands-On-Learning-in-Computer-Vision
+	url = https://github.com/hundong2/Hands-On-Learning-in-Computer-Vision.git
