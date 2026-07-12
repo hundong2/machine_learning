@@ -2,6 +2,7 @@
 
 # ING List 
 
+- [ ] [researcher basic vision papers](./researcher/basic/README.md).
 - [ ] [dacon - 2026.04.20](./dacon/README.md).   
 - [ ] [google adk](./google/google_adk/README.md).    
 - [ ] [essential mathematics-for-ai](./essential-mathematics-for-ai/README.md).   
