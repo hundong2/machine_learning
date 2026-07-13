@@ -16,3 +16,4 @@
 # 2.Tensorboard 
 
 - [Tensorboard](./15.Configuration.ipynb)
+- `tensorboard --logdir=<path>`
