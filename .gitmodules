@@ -10,3 +10,6 @@
 [submodule "Hands-On-Learning-in-Computer-Vision"]
 	path = Hands-On-Learning-in-Computer-Vision
 	url = https://github.com/hundong2/Hands-On-Learning-in-Computer-Vision.git
+[submodule "TRACE"]
+	path = TRACE
+	url = https://github.com/hundong2/TRACE.git
