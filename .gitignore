@@ -14,3 +14,4 @@
 *.xlsx
 .env
 temp/
+data/
