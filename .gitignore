@@ -15,3 +15,5 @@
 .env
 temp/
 data/
+sign_test/
+sign_train/
