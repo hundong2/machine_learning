@@ -6,6 +6,7 @@ readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
     "albumentations>=2.0.8",
+    "dataset-utils>=0.0.48",
     "imblearn>=0.0",
     "ipykernel>=7.2.0",
     "ipywidgets>=8.1.8",
