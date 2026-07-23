@@ -6,7 +6,11 @@ readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
     "albumentations>=2.0.8",
+    "bs4>=0.0.2",
     "dataset-utils>=0.0.48",
+    "datasets>=5.0.0",
+    "emoji>=2.15.0",
+    "gensim>=4.4.0",
     "imblearn>=0.0",
     "ipykernel>=7.2.0",
     "ipywidgets>=8.1.8",
@@ -17,8 +21,10 @@ dependencies = [
     "seaborn>=0.13.2",
     "statsmodels>=0.14.6",
     "tensorboard>=2.21.0",
+    "tokenizers>=0.23.1",
     "torch>=2.11.0",
     "torchsummary>=1.5.1",
     "torchvision>=0.26.0",
     "tqdm>=4.67.3",
+    "transformers>=4.17.0",
 ]
