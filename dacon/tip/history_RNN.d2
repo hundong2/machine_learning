@@ -1,0 +1,144 @@
+# 주요 AI 순환 모델 및 발전 기술 비교 다이어그램
+
+direction: down
+
+evolution_flow: 모델 발전 흐름 {
+  direction: right
+  style: {
+    stroke-dash: 5
+    fill: "#f0f8ff"
+  }
+
+  rnn_node: 기존 RNN {
+    shape: oval
+    style.fill: "#e0e0e0"
+  }
+
+  lstm_node: LSTM\n장기 기억 보완 {
+    shape: oval
+    style.fill: "#c0e0f0"
+  }
+
+  gru_node: GRU\n효율성 개선 {
+    shape: oval
+    style.fill: "#a0e0e0"
+  }
+
+  attention_node: Attention\n중요 정보에 집중 {
+    shape: oval
+    style.fill: "#80d0d0"
+  }
+
+  transformer_node: Transformer\n병렬 처리 {
+    style: {
+      fill: "#40c0c0"
+      stroke: "#208080"
+    }
+  }
+
+  rnn_node -> lstm_node: 장거리 기억
+  lstm_node -> gru_node: 구조 단순화
+  gru_node -> attention_node: 선택적 집중
+  attention_node -> transformer_node: 병렬 처리
+}
+
+# 상세 비교: 4개의 모델 카드를 그리드로 배치한다.
+comparison_table: 모델 상세 비교 {
+  grid-columns: 4
+  grid-gap: 16
+  style: {
+    stroke: "#dddddd"
+    fill: "#ffffff"
+  }
+
+  rnn: RNN {
+    grid-columns: 1
+    grid-gap: 0
+    style.fill: "#fafafa"
+
+    structure: 구조\n간단 순환
+    core: 핵심 특징\n단기 정보에 강함
+    memory: 기억 방식\n이전 정보와 현재 입력을 단순 결합
+    gradient: 기울기 소실\n심각 {
+      style.fill: "#ffe0e0"
+    }
+    speed: 계산량과 속도\n작음 / 빠름
+    long_memory: 장거리 기억력\n매우 낮음 {
+      style.fill: "#ffe0e0"
+    }
+    analogy: 직관적 비유\n금방 잊는 메모
+    use_case: 주요 용도\n간단한 시계열 예측
+  }
+
+  lstm: LSTM {
+    grid-columns: 1
+    grid-gap: 0
+    style.fill: "#f5fbff"
+
+    structure: 구조\n3개 게이트와 셀 상태
+    core: 핵심 특징\n장거리 정보를 선택적으로 기억
+    memory: 기억 방식\n셀 상태와 은닉 상태를 분리하여 조절
+    gradient: 기울기 소실\n게이트로 완화 {
+      style.fill: "#e0ffe0"
+    }
+    speed: 계산량과 속도\n많음 / 상대적으로 느림 {
+      style.fill: "#ffe0e0"
+    }
+    long_memory: 장거리 기억력\n높음 {
+      style.fill: "#e0ffe0"
+    }
+    analogy: 직관적 비유\n꼼꼼한 다이어리
+    use_case: 주요 용도\n번역과 복잡한 시계열
+  }
+
+  gru: GRU {
+    grid-columns: 1
+    grid-gap: 0
+    style.fill: "#f3ffff"
+
+    structure: 구조\n2개 게이트
+    core: 핵심 특징\n효율적인 장기 기억
+    memory: 기억 방식\n하나의 은닉 상태로 이전 정보와 현재 입력을 조절
+    gradient: 기울기 소실\n게이트로 완화 {
+      style.fill: "#e0ffe0"
+    }
+    speed: 계산량과 속도\nLSTM보다 가벼운 편 {
+      style.fill: "#e0ffe0"
+    }
+    long_memory: 장거리 기억력\n높음 {
+      style.fill: "#e0ffe0"
+    }
+    analogy: 직관적 비유\n효율적인 일정표
+    use_case: 주요 용도\n챗봇과 음성 인식
+  }
+
+  transformer: Transformer {
+    grid-columns: 1
+    grid-gap: 0
+    style: {
+      fill: "#f0faf0"
+      stroke: "#208080"
+      bold: true
+    }
+
+    structure: 구조\nSelf-Attention과 병렬 처리
+    core: 핵심 특징\n전체 토큰 관계를 동시에 계산
+    memory: 정보 처리\nSelf-Attention으로 토큰 간 관계 계산
+    gradient: 기울기 소실\n순환 경로를 제거하여 완화 {
+      style.fill: "#e0ffe0"
+    }
+    speed: 계산량과 속도\n계산량은 크지만 병렬화에 유리 {
+      style.fill: "#e0ffe0"
+    }
+    long_memory: 장거리 관계\n직접 참조 가능 {
+      style.fill: "#b0ffb0"
+    }
+    analogy: 직관적 비유\n도서관 전체를 한눈에 검색
+    use_case: 주요 용도\nGPT, BERT와 대규모 언어 모델
+  }
+}
+
+# 두 상위 영역의 세로 배치 순서를 고정하는 보이지 않는 연결
+evolution_flow -> comparison_table {
+  style.opacity: 0
+}
