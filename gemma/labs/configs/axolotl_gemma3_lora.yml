@@ -1,0 +1,52 @@
+# Replace the dataset path with an absolute path before running.
+# Validate all keys with `axolotl config-schema` from the installed version.
+
+base_model: google/gemma-3-1b-it
+trust_remote_code: false
+
+load_in_8bit: false
+load_in_4bit: false
+adapter: lora
+lora_r: 8
+lora_alpha: 16
+lora_dropout: 0.0
+lora_target_linear: true
+
+chat_template: tokenizer_default
+datasets:
+  - path: /ABSOLUTE/PATH/machine_learning/gemma/labs/data/train.jsonl
+    type: chat_template
+    field_messages: messages
+    roles_to_train:
+      - assistant
+dataset_prepared_path: prepared/gemma3-support-v1
+val_set_size: 0.2
+output_dir: outputs/axolotl-gemma3-lora-smoke
+
+sequence_len: 256
+sample_packing: false
+pad_to_sequence_len: true
+train_on_inputs: false
+
+micro_batch_size: 1
+gradient_accumulation_steps: 8
+num_epochs: 1
+max_steps: 20
+learning_rate: 0.0001
+lr_scheduler: cosine
+warmup_ratio: 0.05
+weight_decay: 0.01
+optimizer: adamw_torch
+
+bf16: auto
+fp16: false
+gradient_checkpointing: true
+
+logging_steps: 1
+eval_steps: 10
+save_steps: 10
+save_total_limit: 2
+seed: 42
+special_tokens:
+  pad_token: <pad>
+

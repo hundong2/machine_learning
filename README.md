@@ -2,6 +2,8 @@
 
 # ING List 
 
+- [ ] [Gemma 파인튜닝 프레임워크 실습](./gemma/README.md) — 기초부터 LoRA·분산 학습·클라우드 배포까지.
+- [ ] 🤖 [Smart AI Tracking System 실무 포트폴리오](./smart-ai-tracking-system/README.md) — Python 모델링부터 ONNX·C++·ROS 2·Raspberry Pi 팬·틸트 제어까지.
 - [ ] [researcher basic vision papers](./researcher/basic/README.md).
 - [ ] [dacon - 2026.04.20](./dacon/README.md).   
 - [ ] [google adk](./google/google_adk/README.md).    

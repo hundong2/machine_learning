@@ -1,0 +1,9 @@
+outputs/
+prepared/
+checkpoints/
+__pycache__/
+*.safetensors
+*.bin
+*.gguf
+*.h5
+*.log
