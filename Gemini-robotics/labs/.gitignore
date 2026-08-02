@@ -1,0 +1,12 @@
+# API secret은 어떤 형태로도 저장소에 포함하지 않습니다.
+.env
+# Python 가상 환경과 bytecode를 제외합니다.
+.venv/
+__pycache__/
+*.py[cod]
+# 실습 중 만든 개인정보 가능성이 있는 입력·출력을 제외합니다.
+private-data/
+outputs/
+# Jupyter가 만드는 임시 checkpoint를 제외합니다.
+.ipynb_checkpoints/
+

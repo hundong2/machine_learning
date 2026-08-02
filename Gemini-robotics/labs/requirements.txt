@@ -1,0 +1,10 @@
+# Gemini Robotics ER 2 호출에 사용하는 Google 공식 Python SDK입니다.
+google-genai>=2.6,<3
+# 배열과 notebook의 좌표 실습에 사용합니다.
+numpy>=2.0,<3
+# notebook에서 point와 box를 그리는 데 사용합니다.
+matplotlib>=3.9,<4
+# API pointing 결과를 원본 이미지 크기의 픽셀로 바꾸는 데 사용합니다.
+pillow>=10,<13
+# Jupyter notebook 실행 환경입니다.
+jupyterlab>=4.2,<5
