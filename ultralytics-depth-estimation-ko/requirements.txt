@@ -1,0 +1,5 @@
+ultralytics>=8.4.115
+opencv-python>=4.10
+matplotlib>=3.9
+numpy>=1.26
+jupyterlab>=4.2
