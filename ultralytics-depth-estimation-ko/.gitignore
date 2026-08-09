@@ -1,0 +1,10 @@
+*.pt
+*.onnx
+*.engine
+*.torchscript
+*_openvino_model/
+.venv/
+outputs/
+runs/
+__pycache__/
+.ipynb_checkpoints/
